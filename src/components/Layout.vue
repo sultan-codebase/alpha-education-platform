@@ -4,12 +4,12 @@
     <!-- SIDEBAR -->
     <el-aside
       width="100px"
-      class="bg-gray-900 text-white flex flex-col items-center py-8 space-y-6"
+      class="bg-gray-900 text-white flex flex-col items-center py-12 space-y-6"
     >
       <!-- Company Logo -->
       <el-button
         type="text"
-        class="p-2 w-16 h-16 flex items-center justify-center rounded transition-colors duration-200 ease-in-out"
+        class="w-16 h-16 flex items-center justify-center rounded transition-colors duration-200 ease-in-out"
         @click="onLogoClick"
       >
         <!-- Now scaled to 2rem×2rem inside a 3rem×3rem box -->
@@ -99,5 +99,8 @@ function isActive(path: string) {
 </script>
 
 <style scoped>
-/* no extra CSS needed; we handled alignment with Tailwind classes above */
+/* Remove the 12px left margin Element-Plus adds between buttons */
+.el-aside .el-button {
+  margin-left: 0 !important;
+}
 </style>

@@ -11,7 +11,9 @@ import AddCourse      from '@/views/AddCourse.vue'
 import CourseForm     from '@/views/CourseForm.vue'
 import AddFlow        from '@/views/AddFlow.vue'
 import FlowDetail     from '@/views/FlowDetail.vue'      
-import EditFlow       from '@/views/EditFlow.vue'       
+import EditFlow       from '@/views/EditFlow.vue'    
+import Autorization   from '@/views/Autorization.vue'
+import Verification   from '@/views/Verification.vue'   
 
 const routes = [
   { path: '/',                    name: 'Home',            component: Home },
@@ -30,9 +32,22 @@ const routes = [
   { path: '/flows/add',           name: 'AddFlow',         component: AddFlow },
   { path: '/flows/:flowId',       name: 'FlowDetail',      component: FlowDetail,    props: true },
   { path: '/flows/:flowId/edit',  name: 'EditFlow',        component: EditFlow,      props: true },
+  { path: '/login',               name: 'Autorization',    component: Autorization, meta: { noLayout: true } },
+  { path: '/verification',        name: 'Verification',    component: Verification, meta: { noLayout: true }},
 ]
 
 export const router = createRouter({
   history: createWebHistory(),
   routes,
+})
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = !!localStorage.getItem('token')
+  const publicPages = ['Autorization', 'Verification'] // по именам маршрутов
+
+  if (!isAuthenticated && !publicPages.includes(to.name as string)) {
+    return next('/login')
+  }
+
+  next()
 })

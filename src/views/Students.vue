@@ -93,7 +93,7 @@
       <table class="min-w-full bg-white border rounded-lg">
         <thead class="bg-purple-50">
           <tr>
-            <th class="px-6 py-6 text-purple-700 text-left">#</th>
+            <th class="px-6 py-6 text-purple-700 text-left"></th>
             <th class="px-6 py-6 text-purple-700 text-left">Студент</th>
             <th class="px-6 py-6 text-purple-700 text-left">ИИН</th>
           </tr>
