@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-white flex">
     <!-- Логотип и надпись -->
     <div class="absolute top-6 left-6 flex items-center gap-2 z-10">
-      <img src="@/assets/logos/Rectangle.png" alt="logo" class="w-14 h-14" />
+      <img src="@/assets/logos/company-logo.svg" alt="logo" class="w-14 h-14" />
       <span class="text-[#2B3674] text-[22px] font-semibold font-['Inter']">
         Alpha<br /> Education
       </span>

@@ -1,51 +1,53 @@
 <template>
-  <div class="p-7">
+  <div class="p-6">
     <!-- Заголовок + Поиск -->
     <div class="flex justify-between items-center">
-      <!-- Заголовок scaled to 1.2x original -->
-      <h1 class="text-[1.8rem] font-semibold">Список студентов</h1>
+      <h1 class="text-2xl font-semibold">Список студентов</h1>
       <div class="relative w-1/3">
         <el-input
           v-model="searchQuery"
           placeholder="Поиск"
           clearable
-          class="w-full bg-purple-50 border border-purple-200 rounded-xl pl-12 pr-5 py-4 text-[1.2rem]"
+          class="w-full bg-purple-50 border border-purple-200 rounded-xl pl-10 pr-4 py-2"
           @clear="applyFilters"
           @keyup.enter="applyFilters"
         >
           <template #prefix>
-            <Search class="text-purple-400 text-[1.2rem]" />
+            <Search class="text-purple-400" />
           </template>
         </el-input>
       </div>
     </div>
 
     <!-- Кнопки Добавить / Фильтр / Сохранить в Excel -->
-    <div class="mt-4 flex items-center space-x-3 bg-purple-50 p-5 rounded-xl">
+    <div class="mt-4 flex items-center space-x-2 bg-purple-50 p-4 ">
       <el-button
-        class="flex items-center text-purple-600 bg-white border border-purple-200 hover:bg-purple-100 px-5 py-4 rounded-xl text-[1.2rem]"
+        class="flex items-center text-purple-600 bg-white border border-purple-200 hover:bg-purple-100 "
+        size="medium"
         @click="onAddStudent"
       >
-        <img :src="addStudentLogo" alt="Добавить" class="w-6 h-6 mr-2" />
+        <img :src="addStudentLogo" alt="Добавить" class="w-5 h-5 mr-2" />
         Добавить студента
       </el-button>
       <el-button
         :class="[
-          'flex items-center px-5 py-4 rounded-xl text-[1.2rem]',
+          'flex items-center  text-purple-600 hover:bg-purple-100',
           showFilter
-            ? 'bg-purple-500 border-purple-500 text-white'
-            : 'bg-white border border-purple-200 text-purple-600 hover:bg-purple-100'
+            ? 'bg-purple-500 border border-purple-500 text-white'
+            : 'bg-white border border-purple-200'
         ]"
+        size="medium"
         @click="showFilter = !showFilter"
       >
-        <img :src="filterLogo" alt="Фильтр" class="w-6 h-6 mr-2" />
+        <img :src="filterLogo" alt="Фильтр" class="w-5 h-5 mr-2" />
         Фильтр
       </el-button>
       <el-button
-        class="flex items-center text-purple-600 bg-white border border-purple-200 hover:bg-purple-100 px-5 py-4 rounded-xl text-[1.2rem]"
+        class="flex items-center text-purple-600 bg-white border border-purple-200 hover:bg-purple-100 "
+        size="medium"
         @click="onSaveExcel"
       >
-        <Document class="mr-2 text-[1.2rem]" />
+        <Document class="mr-2" />
         Сохранить в Excel
       </el-button>
     </div>
@@ -53,16 +55,16 @@
     <!-- Панель фильтров -->
     <el-card
       v-if="showFilter"
-      class="mt-4 bg-purple-50 border border-purple-200 rounded-xl p-5"
+      class="mt-4 bg-purple-50 border border-purple-200 rounded-xl p-4"
       shadow="never"
     >
-      <div class="flex flex-wrap gap-6 items-center text-[1.2rem]">
+      <div class="flex flex-wrap gap-4 items-center">
         <div>
           <el-select
             v-model="filter.course"
             placeholder="Выбрать курс"
             clearable
-            class="w-60"
+            class="w-48"
           >
             <el-option
               v-for="c in courses"
@@ -77,7 +79,7 @@
             v-model="filter.stream"
             placeholder="Выбрать поток"
             clearable
-            class="w-60"
+            class="w-48"
           >
             <el-option
               v-for="s in streams"
@@ -87,13 +89,14 @@
             />
           </el-select>
         </div>
-        <el-checkbox v-model="filter.topStudent" class="text-[1.2rem]">
+        <el-checkbox v-model="filter.topStudent">
           Top Student
         </el-checkbox>
         <el-button
           type="primary"
           @click="onResetFilters"
-          class="px-6 py-4 rounded-xl text-[1.2rem]"
+          size="small"
+          class="rounded-xl"
         >
           Сбросить
         </el-button>
@@ -102,32 +105,32 @@
 
     <!-- Таблица студентов -->
     <div class="mt-6 overflow-auto bg-white border border-purple-200 rounded-xl">
-      <table class="min-w-full">
+      <table class="min-w-full bg-white">
         <thead class="bg-purple-50">
           <tr>
-            <th class="px-10 py-7 text-purple-700 text-left text-[1.2rem]"></th>
-            <th class="px-10 py-7 text-purple-700 text-left text-[1.2rem] font-semibold">Студент</th>
-            <th class="px-10 py-7 text-purple-700 text-left text-[1.2rem] font-semibold">ИИН</th>
-            <th class="px-10 py-7 text-purple-700 text-left text-[1.2rem] font-semibold">Email</th>
-            <th class="px-10 py-7 text-purple-700 text-left text-[1.2rem] font-semibold">Номер телефона</th>
+            <th class="px-6 py-6 text-purple-700 text-left"></th>
+            <th class="px-6 py-6 text-purple-700 text-left">Студент</th>
+            <th class="px-6 py-6 text-purple-700 text-left">ИИН</th>
+            <th class="px-6 py-6 text-purple-700 text-left">Email</th>
+            <th class="px-6 py-6 text-purple-700 text-left">Номер телефона</th>
           </tr>
         </thead>
         <tbody>
           <tr
             v-for="(s, idx) in filteredList"
             :key="s.id"
-            class="cursor-pointer hover:bg-gray-100 even:bg-purple-50"
+            class="cursor-pointer hover:bg-gray-50 even:bg-purple-50"
             @click="goToProfile(s.id)"
           >
-            <td class="px-10 py-7">
-              <span class="inline-flex items-center justify-center w-8 h-8 bg-purple-100 text-purple-600 rounded-md text-[1.2rem]">
+            <td class="px-6 py-6">
+              <span class="inline-flex items-center justify-center w-6 h-6 bg-purple-100 text-purple-600 rounded-md">
                 {{ idx + 1 }}
               </span>
             </td>
-            <td class="px-10 py-7 text-gray-900 text-[1.2rem]">{{ s.name }}</td>
-            <td class="px-10 py-7 text-gray-900 text-[1.2rem]">{{ s.iin }}</td>
-            <td class="px-10 py-7 text-gray-900 text-[1.2rem]">{{ s.email }}</td>
-            <td class="px-10 py-7 text-gray-900 text-[1.2rem]">{{ s.phone }}</td>
+            <td class="px-6 py-6 text-md text-gray-900">{{ s.name }}</td>
+            <td class="px-6 py-6 text-md text-gray-900">{{ s.iin }}</td>
+            <td class="px-6 py-6 text-md text-gray-900">{{ s.email }}</td>
+            <td class="px-6 py-6 text-md text-gray-900">{{ s.phone }}</td>
           </tr>
         </tbody>
       </table>

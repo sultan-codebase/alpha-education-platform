@@ -14,6 +14,7 @@ import FlowDetail     from '@/views/FlowDetail.vue'
 import EditFlow       from '@/views/EditFlow.vue'    
 import Autorization   from '@/views/Autorization.vue'
 import Verification   from '@/views/Verification.vue'   
+import StudentPaymentCalendar from '@/views/StudentPaymentCalendar.vue'
 
 const routes = [
   { path: '/',                    name: 'Home',            component: Home },
@@ -34,6 +35,19 @@ const routes = [
   { path: '/flows/:flowId/edit',  name: 'EditFlow',        component: EditFlow,      props: true },
   { path: '/login',               name: 'Autorization',    component: Autorization, meta: { noLayout: true } },
   { path: '/verification',        name: 'Verification',    component: Verification, meta: { noLayout: true }},
+  { path: '/finance/payments', name: 'StudentPayments', component: () => import('@/views/StudentPayments.vue') },
+  { path: '/finance/reports', name: 'Reports', component: () => import('@/views/Reports.vue') },
+  { path: '/finance/reports/total-revenue', component: () => import('@/views/TotalRevenue.vue') },
+  { path: '/finance/reports/debts', component: () => import ('@/views/Debts.vue') },
+  { path: '/finance/reports/student-funding', name: 'StudentFunding', component: () => import('@/views/StudentFunding.vue') },
+  { path: '/login', name: 'Autorization', component: Autorization },
+  { path: '/verification', name: 'Verification', component: Verification },
+  {
+        path: '/payments/:id/calendar', // /finance/payments/42/calendar
+        name: 'StudentPaymentCalendar',
+        component: StudentPaymentCalendar,
+        props: true
+      },
 ]
 
 export const router = createRouter({
