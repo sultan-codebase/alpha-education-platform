@@ -246,7 +246,7 @@ function downloadExcel() {
   font-size: 14px;
 }
 .download-btn {
-  background-color: #0f0e18;
+  background-color: #6252fe;
   color: white;
   font-size: 14px;
   font-weight: 600;
