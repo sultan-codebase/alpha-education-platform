@@ -326,7 +326,7 @@ const unpaidAmount = computed(() => totalPayments.value - paidAmount.value);
   font-weight: 500;
 }
 .download-btn {
-  background-color: #6252fe;
+  background-color: #0f0c2e;
   color: white;
   font-size: 14px;
   font-weight: 600;
