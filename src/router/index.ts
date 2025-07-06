@@ -15,6 +15,7 @@ import EditFlow       from '@/views/EditFlow.vue'
 import Autorization   from '@/views/Autorization.vue'
 import Verification   from '@/views/Verification.vue'   
 import StudentPaymentCalendar from '@/views/StudentPaymentCalendar.vue'
+import CustomDropdown from '@/components/CustomDropdown.vue'
 
 const routes = [
   { path: '/',                    name: 'Home',            component: Home },
@@ -48,6 +49,8 @@ const routes = [
         component: StudentPaymentCalendar,
         props: true
       },
+  { path: '/dropdown-test', component: CustomDropdown }
+  
 ]
 
 export const router = createRouter({

@@ -1,24 +1,24 @@
 <template>
   <div class="p-6 bg-gray-100 min-h-screen">
-    <div class="max-w-3xl mx-auto px-4">
+    <div class=" mx-auto px-4">
       <!-- Заголовок -->
       <h2 class="text-3xl font-semibold mb-6">Добавить курс</h2>
 
       <!-- Форма -->
-      <el-form ref="formRef" label-width="0" class="space-y-6">
-        <el-input
-          v-model="courseName"
-          placeholder="Название"
-          clearable
-          size="large"
-          class="w-full bg-purple-50 placeholder-purple-300 text-lg rounded-lg border border-purple-200"
-        />
-        <div class="flex justify-end">
-          <el-button type="primary" size="large" @click="submitCourse">
-            Создать
-          </el-button>
-        </div>
-      </el-form>
+        <el-form ref="formRef" label-width="0" class="space-y-6">
+          <el-input
+            v-model="courseName"
+            placeholder="Название"
+            clearable
+            size="large"
+            class=" w-full bg-[#F1EFFF] text-lg rounded-lg border"
+          />
+          <div class="flex justify-end ">
+            <el-button class="bg-[#6252FE]" type="primary" size="large" @click="submitCourse">
+              Создать
+            </el-button>
+          </div>
+        </el-form>
     </div>
 
     <!-- УСПЕШНО -->

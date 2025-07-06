@@ -4,6 +4,7 @@
   <div class="top-bar">
     <h2>Оплаты студентов</h2>
 
+<!-- Поисковик -->
 <div class="search-wrapper">
   <img src="@/assets/logos/search.png" class="search-icon" />
     <input
@@ -15,57 +16,105 @@
   </div>
 </div>
 
-<!-- Кнопка фильтра -->
-<div class="filter-bar">
-  <button class="filter-btn" @click="toggleFilters">
-    <img src="@/assets/logos/filter.png" class="filter-icon" />
-      Фильтр
-  </button>
+
+<div class="filter-button-wrapper">
+  <div class="filter-bar">
+    <button
+      :class="['filter-btn', { 'filter-btn--active': filtersVisible }]"
+      @click="toggleFilters"
+      type="button"
+    >
+      <img src="@/assets/logos/filter.png" class="filter-icon" />
+      <span>Фильтр</span>
+    </button>
+  </div>
 </div>
+  
 
 <!-- Панель фильтров -->
 <div v-if="filtersVisible" class="filters-box">
 <!-- Тип финансирования -->
   <div class="relative w-56">
-    <button @click="toggleFundingDropdown" class="filter-select w-full flex justify-between items-center">
+    <button
+      @click="toggleFundingDropdown"
+      class="filter-select w-full flex justify-between items-center"
+      type="button"
+    >
       {{ selectedFunding || 'Финансирование' }}
-        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-        </svg>
+      <svg
+        :class="[
+          'w-4 h-4 ml-2 transform transition-transform duration-200',
+          showFundingDropdown ? 'rotate-180' : ''
+        ]"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 9l-7 7-7-7"
+        />
+      </svg>
     </button>
-      <ul v-if="showFundingDropdown" class="absolute z-50 mt-2 w-full bg-white border border-purple-200 rounded-lg shadow-lg">
-        <li
-          v-for="option in fundingOptions"
-          :key="option"
-          @click="selectFunding(option)"
-          class="cursor-pointer px-4 py-2 hover:bg-gray-100"
-          :class="{ 'text-[rgb(98,82,254)] font-medium': selectedFunding === option }"
-        >
-          {{ option }}
-        </li>
-      </ul>
-  </div>
 
-<!-- Статус -->
-  <div class="relative w-56">
-    <button @click="toggleStatusDropdown" class="filter-select w-full flex justify-between items-center">
-      {{ selectedStatus || 'Статус' }}
-        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-        </svg>
-    </button>
-      <ul v-if="showStatusDropdown" class="absolute z-50 mt-2 w-full bg-white border border-purple-200 rounded-lg shadow-lg">
-        <li
-          v-for="option in statusOptions"
-          :key="option"
-          @click="selectStatus(option)"
-          class="cursor-pointer px-4 py-2 hover:bg-gray-100"
-          :class="{ 'text-[rgb(98,82,254)] font-medium': selectedStatus === option }"
-        >
+    <ul
+      v-if="showFundingDropdown"
+      class="absolute z-50 mt-2 w-full bg-white border border-purple-200 rounded-lg shadow-lg"
+    >
+      <li
+        v-for="option in fundingOptions"
+        :key="option"
+        @click="selectFunding(option)"
+        class="cursor-pointer px-4 py-2 hover:bg-gray-100"
+        :class="{ 'text-[rgb(98,82,254)] font-medium': selectedFunding === option }"
+      >
         {{ option }}
       </li>
     </ul>
   </div>
+
+<!-- Статус -->
+  <div class="relative w-56">
+  <button
+    @click="toggleStatusDropdown"
+    class="filter-select w-full flex justify-between items-center"
+    type="button"
+  >
+    {{ selectedStatus || 'Статус' }}
+    <svg
+      :class="[
+        'w-4 h-4 ml-2 transform transition-transform duration-200',
+        showStatusDropdown ? 'rotate-180' : ''
+      ]"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M19 9l-7 7-7-7"
+      />
+    </svg>
+  </button>
+  <ul
+    v-if="showStatusDropdown"
+    class="absolute z-50 mt-2 w-full bg-white border border-purple-200 rounded-lg shadow-lg"
+  >
+    <li
+      v-for="option in statusOptions"
+      :key="option"
+      @click="selectStatus(option)"
+      class="cursor-pointer px-4 py-2 hover:bg-gray-100"
+      :class="{ 'text-[rgb(98,82,254)] font-medium': selectedStatus === option }"
+    >
+      {{ option }}
+    </li>
+  </ul>
+</div>
 
 <!-- Только с долгами -->
   <label class="filter-select checkbox-style">
@@ -78,7 +127,7 @@
   <table class="student-table">
     <thead>
       <tr>
-        <th class="w-12"></th>
+        <th class="w-12">#</th>
         <th>Студент</th>
         <th>ИИН</th>
         <th>Финансирование</th>
@@ -92,7 +141,7 @@
           class="cursor-pointer"
 >
         <td>
-          <div class=" w-6 h-6 rounded-md bg-[#F1ECFF] text-[rgb(98,82,254)] text-xs font-semibold flex items-center justify-center">
+          <div class=" w-6 h-6 rounded-md bg-[#F1EFFF] text-[rgb(98,82,254)] text-xs font-semibold flex items-center justify-center">
             {{ index + 1 }}
           </div>
         </td>
@@ -105,6 +154,7 @@
 </div>
 </template>
 
+
 <!-- Script -->
 <script setup>
 import { ref, computed } from 'vue'
@@ -112,11 +162,13 @@ import { ref, computed } from 'vue'
 const search = ref('')
 const filtersVisible = ref(false)
 
+
 const selectedFunding = ref('')
 const selectedStatus = ref('')
 const withDebt = ref(false)
 const showFundingDropdown = ref(false)
 const showStatusDropdown = ref(false)
+
 
 const toggleFilters = () => {
   filtersVisible.value = !filtersVisible.value
@@ -157,6 +209,7 @@ const filteredStudents = computed(() =>
 )
 </script>
 
+
 <!-- Script -->
 <style scoped>
 .student-payments {
@@ -194,10 +247,9 @@ const filteredStudents = computed(() =>
 .search-input {
   padding: 10px 15px 10px 38px;
   font-size: 14px;
-  border: 1px solid #cfc0ff;
   border-radius: 10px;
-  background-color: #f4f0ff;
-  width: 220px;
+  background-color: #F1EFFF;
+  width: 500px;
   outline: none;
   color: #5a4fcf;
 }
@@ -209,9 +261,7 @@ const filteredStudents = computed(() =>
 
 .filter-btn {
   background-color: #f4f0ff;
-  color: #836eff;
-  border: 1px solid #cfc0ff;
-  border-radius: 10px;
+  color: #6252FE;
   padding: 8px 16px;
   font-weight: 500;
   cursor: pointer;
@@ -219,6 +269,7 @@ const filteredStudents = computed(() =>
   display: flex;
   align-items: center;
   gap: 6px;
+  margin-left: 10px;
 }
 
 .filter-icon {
@@ -227,11 +278,11 @@ const filteredStudents = computed(() =>
 }
 
 .filters-box {
-  background-color: #f4f0ff;
+  background-color: #F1EFFF;
   border-radius: 12px;
-  padding: 16px;
+  padding: 9px;
   margin-bottom: 16px;
-  margin-left: -16px;
+  margin-left: 0px;
   display: flex;
   gap: 16px;
   align-items: center;
@@ -239,9 +290,8 @@ const filteredStudents = computed(() =>
 }
 
 .filter-select {
-  background: #f4f0ff;
-  color: #836eff;
-  border: 1px solid #cfc0ff;
+  background: #FFFFFF;
+  color: #6252FE;
   border-radius: 10px;
   padding: 8px 12px;
   font-size: 14px;
@@ -253,23 +303,24 @@ const filteredStudents = computed(() =>
   align-items: center;
   padding: 8px 12px;
   border-radius: 10px;
-  border: 1px solid #cfc0ff;
   font-size: 14px;
   min-height: 40px;
   gap: 8px;
-  color: #836eff;
+  color: #6252FE;
+  background-color: #FFFFFF;
 }
 
 .student-table {
   width: 100%;
   border-collapse: collapse;
-  border: 2px solid #dcd2ff;
+  border:#F1EFFF;
   border-radius: 10px;
   overflow: hidden;
+  background-color: #FFFFFF;
 }
 
 .student-table thead {
-  background-color: #b9b3f8;
+  background-color: #F1EFFF;
   font-weight: 600;
 }
 
@@ -278,5 +329,54 @@ const filteredStudents = computed(() =>
   padding: 12px 15px;
   text-align: left;
   border-bottom: 1px solid #eee;
+}
+
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: white;
+  color: #6252FE;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.filter-btn:hover {
+  background-color: rgba(98, 82, 254, 0.1);
+}
+
+.filter-btn--active {
+  background-color: #6252FE;
+  color: white;
+  border-color: #6252FE;
+}
+
+.filter-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.filter-btn--active .filter-icon {
+  filter: brightness(0) invert(1);
+}
+
+.filter-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.filter-button-wrapper {
+  background-color: #F1EFFF;
+  border-radius: 12px;
+  padding-top: 9px;
+  margin-bottom: 20px;
+  margin-left: 0px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;            
 }
 </style>

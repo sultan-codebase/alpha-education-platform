@@ -37,37 +37,32 @@
           class="space-y-4 mt-6"
         >
           <template v-for="course in courses" :key="course.id">
-            <el-card
-              shadow="never"
-              class="flex items-center justify-between p-0 bg-white rounded-lg hover:bg-gray-50 cursor-pointer"
-              @click="viewCourseFlows(course)"
-            >
-              <div
-                class="
-                  flex-1 flex justify-between items-center
-                  px-6 py-4 md:px-8 md:py-6 lg:px-10 lg:py-8
-                "
-              >
-                <span class="text-base md:text-lg lg:text-xl font-medium">
-                  {{ course.name }}
-                </span>
-                <el-icon>
-                  <ArrowRight class="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 text-purple-500" />
-                </el-icon>
-              </div>
-            </el-card>
+          <el-card shadow="never"
+              class="p-0 bg-white rounded-lg hover:bg-gray-50 cursor-pointer w-full"
+              @click="viewCourseFlows(course)">
+            <div class="flex justify-between items-center w-full px-6 py-4">
+              <!----------------------------------box size---------------------------------------->
+              <span class="text-base md:text-lg lg:text-xl font-medium">
+                {{ course.name }}
+              </span>
+              <el-icon>
+                <ArrowRight class="w-7 h-7 text-[#BBB4FF]" />
+              </el-icon>
+            </div>
+          </el-card>
           </template>
 
-          <div class="flex justify-end mt-6 space-x-2">
+          <div class="flex justify-end mt-6 space-x-2 ">
             <el-button
               type="primary"
               plain
-              size="small"
+              size="medium"
+              class="text-[#6252FE] bg-[#fff]"
               @click="enterCourseEditMode"
             >
               Редактировать
             </el-button>
-            <el-button type="primary" size="small" @click="goToAddCourse">
+            <el-button type="primary" size="medium" @click="goToAddCourse" class="text-[#fff] bg-[#6252FE]">
               Добавить курс
             </el-button>
           </div>
@@ -85,7 +80,7 @@
                 <div
                   class="
                     flex justify-between items-center
-                    px-6 py-4 md:px-8 md:py-6 lg:px-10 lg:py-8
+                    px-6 py-4 md:px-8 md:py-6 lg:px-10 lg:py-4
                   "
                 >
                   <span class="text-base md:text-lg lg:text-xl font-medium">
@@ -106,10 +101,10 @@
           </template>
 
           <div class="flex justify-end mt-6 space-x-2">
-            <el-button type="success" size="small" @click="editSingleCourse">
+            <el-button type="success" size="medium" @click="editSingleCourse" >
               Редактировать
             </el-button>
-            <el-button type="danger" size="small" @click="confirmDeleteCourses">
+            <el-button type="danger" size="medium" @click="confirmDeleteCourses" >
               Удалить
             </el-button>
           </div>
@@ -146,17 +141,18 @@
       </div>
 
       <!-- B) Если courseId задан → показываем потоки указанного курса -->
-      <div v-else class="relative">
+      <div v-else class="relative" >
         <!-- B1) Если нет Потоков и НЕ в режиме редактирования -->
         <div
           v-if="flowsForThisCourse.length === 0 && !isEditingFlows"
           class="flex flex-col items-center justify-center h-full space-y-4"
+          style="margin-top:120px;"
         >
           <p class="text-lg text-gray-700 text-center">
             Потоки еще не добавлены<br />
             Нажмите “Добавить поток”, чтобы начать
           </p>
-          <el-button type="primary" size="large" @click="goToAddFlow">
+          <el-button type="primary" size="large" @click="goToAddFlow" class="text-[#fff] bg-[#6252FE]">
             Добавить поток
           </el-button>
         </div>
@@ -175,27 +171,27 @@
               <div
                 class="
                   flex justify-between items-center
-                  px-6 py-4 md:px-8 md:py-6 lg:px-10 lg:py-8
-                "
-              >
-                <span class="text-lg md:text-xl font-medium">{{ flow.name }}</span>
+                  px-6 py-4 md:px-8 md:py-6 lg:px-10 lg:py-4">
+                  <!------------------------------------------- size of the box -------------------------------------------->
+                <span class="text-lg md:text-md font-medium">{{ flow.name }}</span>
                 <el-icon>
-                  <ArrowRight class="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 text-purple-500" />
+                  <ArrowRight class="w-7 h-7 text-[#BBB4FF]" />
                 </el-icon>
               </div>
             </el-card>
           </template>
 
-          <div class="flex justify-end mt-6 space-x-2">
+          <div class="flex justify-end mt-6 space-x-2 ">
             <el-button
               type="primary"
               plain
-              size="small"
+              size="medium"
+              class="text-[#6252FE] bg-[#fff]"
               @click="enterFlowEditMode"
             >
               Редактировать
             </el-button>
-            <el-button type="primary" size="small" @click="goToAddFlow">
+            <el-button type="primary" size="medium" @click="goToAddFlow" class="text-[#fff] bg-[#6252FE]">
               Добавить поток
             </el-button>
           </div>
@@ -210,15 +206,16 @@
                 class="flex-1 bg-white rounded-lg hover:bg-gray-50 cursor-pointer"
                 @click="viewFlowDetail(flow)"
               >
+              <!-------------------------------------box size--------------------------------------->
                 <div
                   class="
                     flex justify-between items-center
-                    px-6 py-4 md:px-8 md:py-6 lg:px-10 lg:py-8
+                    px-6 py-4 md:px-8 md:py-6 lg:px-10 lg:py-4
                   "
                 >
                   <span class="text-lg md:text-xl font-medium">{{ flow.name }}</span>
                   <el-icon>
-                    <ArrowRight class="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 text-purple-500" />
+                    <ArrowRight class="w-7 h-7 md:w-6 md:h-6 lg:w-7 lg:h-7 text-purple-500" />
                   </el-icon>
                 </div>
               </el-card>
@@ -232,10 +229,10 @@
           </template>
 
           <div class="flex justify-end mt-6 space-x-2">
-            <el-button type="success" size="small" @click="editSingleFlow">
+            <el-button type="success" size="medium" @click="editSingleFlow">
               Редактировать
             </el-button>
-            <el-button type="danger" size="small" @click="confirmDeleteFlows">
+            <el-button type="danger" size="medium" @click="confirmDeleteFlows">
               Удалить
             </el-button>
           </div>
@@ -260,10 +257,10 @@
               <template v-else>эти потоки?</template>
             </p>
             <div class="flex justify-center space-x-4">
-              <el-button @click="showDeleteFlowsDialog = false" size="small">
+              <el-button @click="showDeleteFlowsDialog = false" size="medium">
                 Отмена
               </el-button>
-              <el-button type="danger" @click="deleteSelectedFlows" size="small">
+              <el-button type="danger" @click="deleteSelectedFlows" size="medium">
                 Удалить
               </el-button>
             </div>
@@ -503,5 +500,8 @@ function onFlowCreatedContinue() {
 .delete-dialog .el-dialog__body,
 .success-dialog .el-dialog__body {
   padding: 0;
+}
+:deep(.el-card__body) {
+  padding: 0 !important;
 }
 </style>

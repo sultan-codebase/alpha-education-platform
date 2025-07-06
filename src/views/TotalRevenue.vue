@@ -3,7 +3,7 @@
     <h2 class="text-2xl font-bold mb-6">Общая выручка</h2>
 
 <!-- Кнопки фильтрации вкладок -->
-  <div class="flex space-x-4 bg-purple-50 p-3 rounded-lg mb-4">
+  <div class="flex space-x-4 bg-[#F1EFFF] p-3 rounded-lg mb-4">
     <router-link
       to="/finance/reports/total-revenue"
       class="tab-button"
@@ -49,14 +49,32 @@
     </teleport>
    </div>
 
-<!--"Курс" -->
+<!-- "Курс" -->
 <div class="relative w-48">
-  <button @click="toggleCourseDropdown" class="filter-select w-full flex justify-between items-center">
+  <button
+    @click="toggleCourseDropdown"
+    class="filter-select w-full flex justify-between items-center"
+    type="button"
+  >
     {{ selectedCourse || 'Курс' }}
-    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+    <svg
+      :class="[
+        'w-4 h-4 ml-2 transform transition-transform duration-200',
+        showCourseDropdown ? 'rotate-180' : ''
+      ]"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M19 9l-7 7-7-7"
+      />
     </svg>
   </button>
+
   <div
     v-if="showCourseDropdown"
     class="absolute z-50 mt-2 w-full bg-white border border-purple-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"
@@ -81,14 +99,29 @@
   </div>
 </div>
 
-
-
 <!-- Оплата -->
 <div class="relative w-48">
-  <button @click="showPaymentDropdown = !showPaymentDropdown" class="filter-select w-full flex justify-between items-center">
+  <button
+    @click="showPaymentDropdown = !showPaymentDropdown"
+    class="filter-select w-full flex justify-between items-center"
+    type="button"
+  >
     <span>{{ selectedPayment || 'Оплата' }}</span>
-    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+    <svg
+      :class="[
+        'w-4 h-4 ml-2 transform transition-transform duration-200',
+        showPaymentDropdown ? 'rotate-180' : ''
+      ]"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M19 9l-7 7-7-7"
+      />
     </svg>
   </button>
 
@@ -110,8 +143,8 @@
 </div>
 
 <!-- Таблица -->
-  <table class="w-full border border-purple-200 rounded-lg overflow-hidden text-left">
-    <thead class="bg-[rgb(185,179,248)] text-sm font-semibold">
+  <table class="w-full border bg-white border-purple-200 rounded-lg overflow-hidden text-left">
+    <thead class="bg-[#ECE9FF] text-sm font-semibold">
       <tr>
         <th class="px-4 py-2">Дата</th>
           <th class="px-4 py-2">Сумма (тг)</th>
@@ -134,7 +167,7 @@
 <!-- Summary Box: Always visible -->
   <div class="mt-6 w-full rounded-xl overflow-hidden border border-[#E0D7FF]">
   <!-- Период -->
-  <div class="bg-[rgb(185,179,248)] px-6 py-4 text-sm font-semibold text-black">
+  <div class="bg-[#ECE9FF] px-6 py-4 text-sm font-semibold text-black">
     Период {{ formattedPeriod }}
   </div>
   <!-- Выручка -->
@@ -143,7 +176,7 @@
     <div>{{ totalAmountDisplay }} тг</div>
   </div>
   <!-- Общая выручка -->
-  <div class="bg-[rgb(185,179,248)] px-6 py-4 text-sm font-semibold flex justify-between items-center">
+  <div class="bg-[#ECE9FF] px-6 py-4 text-sm font-semibold flex justify-between items-center">
     <div>Общая выручка</div>
     <div>{{ totalAmountDisplay }} тг</div>
   </div>
@@ -313,6 +346,7 @@ const rows = [
 ]
 </script>
 
+
 <!-- Styles-->
 <style scoped>
 .tab-button,
@@ -325,29 +359,23 @@ const rows = [
   display: inline-block;
 }
 .tab-button {
-  background: #f4f0ff;
-  color: #836eff;
+  background: #FFFFFF;
+  color: #6252FE;
 }
 .tab-button-active {
-  background: #836eff;
-  color: white;
+  background: #6252FE;
+  color: #FFFFFF;
 }
 .filter-select {
-  background: #f4f0ff;
+  background: #ffffff;
   color: #6252FE;
-  border: 1px solid #cfc0ff;
   border-radius: 8px;
   padding: 8px 12px;
   font-size: 14px;
 }
-.datepicker-popup {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-  padding: 10px;
-}
+
 .download-btn {
-  background-color: #6252fe;
+  background-color: #6252FE;
   color: white;
   font-size: 14px;
   font-weight: 600;
@@ -409,5 +437,17 @@ const rows = [
 .custom-dropdown-item.selected {
   color: #6252FE;
   font-weight: 600;
+}
+
+.filters-wrapper {
+background-color: #F1EFFF;
+  border-radius: 12px;
+  padding: 9px;
+  margin-bottom: 16px;
+  margin-left: 0px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 </style>

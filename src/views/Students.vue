@@ -2,13 +2,13 @@
   <div class="p-6">
     <!-- Заголовок + Поиск -->
     <div class="flex justify-between items-center">
-      <h1 class="text-2xl font-semibold">Список студентов</h1>
-      <div class="relative w-1/3">
+      <h1 class="text-2xl font-bold">Список студентов</h1>
+      <div class="relative bg-[#F1EFFF] w-1/4">
         <el-input
           v-model="searchQuery"
           placeholder="Поиск"
           clearable
-          class="w-full bg-purple-50 border border-purple-200 rounded-xl pl-10 pr-4 py-2"
+          class="w-full bg-[#F1EFFF] borderrounded-xl"
           @clear="applyFilters"
           @keyup.enter="applyFilters"
         >
@@ -20,7 +20,7 @@
     </div>
 
     <!-- Кнопки Добавить / Фильтр / Сохранить в Excel -->
-    <div class="mt-4 flex items-center space-x-2 bg-purple-50 p-4 ">
+    <div class="mt-4 flex items-center space-x-2 bg-[#F1EFFF] p-1 ">
       <el-button
         class="flex items-center text-purple-600 bg-white border border-purple-200 hover:bg-purple-100 "
         size="medium"
@@ -42,12 +42,30 @@
         <img :src="filterLogo" alt="Фильтр" class="w-5 h-5 mr-2" />
         Фильтр
       </el-button>
+    
+      <input
+        type="file"
+        ref="excelInput"
+        accept=".xlsx,.xls"
+        style="display: none"
+        @change="handleExcelFile"
+      />
+
+      <el-button
+        class="flex items-center text-purple-600 bg-white border border-purple-200 hover:bg-purple-100"
+        size="medium"
+        @click="triggerExcelInput"
+      >
+        <img :src="arrowDownLogo" alt="Импорт" class="w-5 h-5 mr-2" />
+        Импорт из Excel
+      </el-button>
+
       <el-button
         class="flex items-center text-purple-600 bg-white border border-purple-200 hover:bg-purple-100 "
         size="medium"
         @click="onSaveExcel"
-      >
-        <Document class="mr-2" />
+        >
+        <img :src="arrowUpLogo" alt="Экспорт" class="w-5 h-5 mr-2" />
         Сохранить в Excel
       </el-button>
     </div>
@@ -55,7 +73,7 @@
     <!-- Панель фильтров -->
     <el-card
       v-if="showFilter"
-      class="mt-4 bg-purple-50 border border-purple-200 rounded-xl p-4"
+      class="mt-4 bg-purple-50 border border-purple-200 rounded-xl"
       shadow="never"
     >
       <div class="flex flex-wrap gap-4 items-center">
@@ -145,6 +163,8 @@ import { useStudentStore, Student } from '@/store/studentStore'
 import { Search, Document } from '@element-plus/icons-vue'
 import addStudentLogo from '@/assets/logos/addstudent.png'
 import filterLogo from '@/assets/logos/filter.png'
+import arrowDownLogo from '@/assets/logos/arrow-down.png'
+import arrowUpLogo from '@/assets/logos/arrow-up.png'
 
 const router = useRouter()
 const store = useStudentStore()
@@ -181,6 +201,21 @@ function goToProfile(id: number) {
   router.push({ name: 'StudentDetail', params: { id } })
 }
 
+const excelInput = ref<HTMLInputElement | null>(null);
+
+function triggerExcelInput() {
+  // Открыть окно выбора файла
+  excelInput.value?.click();
+}
+
+function handleExcelFile(event: Event) {
+  // Сюда попадёт файл после выбора
+  const file = (event.target as HTMLInputElement).files?.[0];
+  if (file) {
+    alert('Вы выбрали файл: ' + file.name);
+    // Здесь можно добавить чтение файла через XLSX если понадобится
+  }
+}
 // Экспорт в Excel
 function onSaveExcel() {
   store.exportToExcel()

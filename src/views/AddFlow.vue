@@ -118,11 +118,12 @@ async function submitFlow() {
 
   // 3.2) Подготовка нового потока
   const newFlow: Omit<Flow, 'id'> = {
-    name:      form.value.name.trim(),
-    mentor:    form.value.mentor.trim(),
+    name: form.value.name.trim(),
+    mentor: form.value.mentor.trim(),
     startDate: form.value.startDate || undefined,
-    endDate:   form.value.endDate   || undefined,
-    courseId:  courseId.value,
+    endDate: form.value.endDate || undefined,
+    courseId: courseId.value,
+    studentIds: []
   }
 
   // 3.3) Добавляем в Pinia‐store
