@@ -1,5 +1,6 @@
 <template>
   <div class="p-6 font-inter">
+    <button class="close-btn" @click="closeCard">✕</button>
     <!-- Загрузка -->
     <div v-if="!student" class="text-center py-10">Загрузка...</div>
     <div v-else>
@@ -378,6 +379,8 @@ import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { useStudentStore } from '@/store/studentStore'
 import Datepicker from "@vuepic/vue-datepicker"
 import "@vuepic/vue-datepicker/dist/main.css"
+import { useRouter } from 'vue-router'
+
 
 interface ScheduleItem {
   date: string
@@ -407,13 +410,14 @@ interface Student {
 }
 
 interface RouteProps { id: string }
-
 const props = defineProps<RouteProps>()
 const showNewPaymentForm = ref(false)
 const showAddPanel = ref(false)
 const store = useStudentStore()
 const student = ref<Student | null>(null)
 const mode = ref<'calendar' | 'history'>('calendar')
+
+const router = useRouter()
 
 // Ссылки на dropdown-обёртки
 const statusDropdownRef = ref<HTMLElement | null>(null)
@@ -502,6 +506,11 @@ function formatDateIso(iso: string) {
     month: '2-digit',
     year:  'numeric'
   })
+}
+
+function closeCard() {
+  if (window.history.length > 1) router.back()
+  else router.push('/finance/payments')
 }
 
 async function saveNewPayment() {
@@ -655,6 +664,18 @@ table {
   /* если нужно, добавьте !important:
      background-color: #FFFFFF !important;
   */
+}
+.close-btn {
+  position: absolute;
+  top: 75px;
+  right: 26px;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  color: #836eff; cursor: pointer;
+  z-index: 99;
 }
 </style>
 
