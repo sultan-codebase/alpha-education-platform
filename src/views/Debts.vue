@@ -2,14 +2,14 @@
   <div class="p-6 font-inter">
     <h2 class="text-2xl font-bold mb-6">Задолженности</h2>
 
-    <!-- Tabs -->
+    <!-- Вкладки -->
     <div class="flex space-x-4 bg-[#F1EFFF] p-3 rounded-lg mb-4">
       <router-link to="/finance/reports/total-revenue" class="tab-button">Общая выручка</router-link>
       <router-link to="/finance/reports/debts" class="tab-button-active">Задолженности</router-link>
       <router-link to="/finance/reports/student-funding" class="tab-button">Финансирование студентов</router-link>
     </div>
     
-    <!-- Filters -->
+    <!-- Филтер -->
     <div class="filters-wrapper relative flex flex-wrap gap-3 mb-6">
       <!-- Начало периода -->
       <div class="relative">
@@ -93,7 +93,7 @@
       </div>
     </div>    
 
-    <!-- Table -->
+    <!-- Таблица -->
     <table class="w-full bg-white border border-purple-200 rounded-lg overflow-hidden text-left">
       <thead class="bg-[#ECE9FF] text-sm font-semibold">
         <tr>
@@ -126,7 +126,7 @@
       </tbody>
     </table>
 
-    <!-- Text Box for Debts -->
+    <!-- Блок задолженностей -->
     <div class="mt-6 w-full rounded-xl overflow-hidden border border-[#E0D7FF]">
       <!-- Период -->
       <div class="bg-[#ECE9FF] px-6 py-4 text-sm font-semibold text-black">
@@ -154,7 +154,7 @@
       </div>
     </div>
 
-    <!-- Download Button -->
+    <!-- Кнопка слхранить-Excell -->
     <div class="mt-4 flex justify-end">
       <button @click="downloadExcel" class="download-btn">
         Сохранить в Excel
@@ -163,6 +163,7 @@
   </div>
 </template>
 
+<!-- Scripts -->
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import Datepicker from 'vue3-datepicker'
@@ -213,7 +214,7 @@ function closeEndPicker() {
   showEndPicker.value = false
 }
 
-// --- Глобальный слушатель для dropdown-ов ---
+// --- Глобальный слушатель(для дропдаунов) ---
 function handleClickOutsideDropdowns(event) {
   // Статус
   if (
@@ -223,7 +224,6 @@ function handleClickOutsideDropdowns(event) {
   ) {
     showStatusDropdown.value = false
   }
-  // Даты (оставляем прежнее поведение, чтобы не сбивать pickers)
   if (
     (startPickerRef.value && !startPickerRef.value.contains(event.target)) &&
     (endPickerRef.value && !endPickerRef.value.contains(event.target))
@@ -232,7 +232,6 @@ function handleClickOutsideDropdowns(event) {
     showEndPicker.value = false
   }
 }
-// --- Конец слушателя ---
 
 onMounted(() => document.addEventListener('click', handleClickOutsideDropdowns))
 onBeforeUnmount(() => document.removeEventListener('click', handleClickOutsideDropdowns))
@@ -296,7 +295,7 @@ const unpaidAmount = computed(() => totalPayments.value - paidAmount.value);
 
 
 
-<!--Styles-->
+<!-- Styles -->
 <style scoped>
 .tab-button,
 .tab-button-active {

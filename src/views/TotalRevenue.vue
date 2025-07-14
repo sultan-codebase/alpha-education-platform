@@ -164,7 +164,7 @@
       </tbody>
     </table>
 
-    <!-- Summary Box: Always visible -->
+    <!-- Итоговая таблица  -->
     <div class="mt-6 w-full rounded-xl overflow-hidden border border-[#E0D7FF]">
       <!-- Период -->
       <div class="bg-[#ECE9FF] px-6 py-4 text-sm font-semibold text-black">
@@ -182,13 +182,14 @@
       </div>
     </div>
 
-    <!-- Save Button -->
+    <!-- Кнопка сохранить-Excel -->
     <div class="mt-4 flex justify-end">
       <button @click="downloadExcel" class="download-btn">Сохранить в Excel</button>
     </div>
   </div>
 </template>
 
+<!-- Scripts -->
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
@@ -251,7 +252,7 @@ function selectPayment(option) {
   showPaymentDropdown.value = false
 }
 
-// --- глобальный слушатель для закрытия обоих dropdown ---
+// --- глобальный слушатель для дропдаунов --- //
 function handleClickOutsideDropdowns(event) {
   if (
     showCourseDropdown.value &&
@@ -268,7 +269,6 @@ function handleClickOutsideDropdowns(event) {
     showPaymentDropdown.value = false
   }
 }
-// --- конец глобального слушателя ---
 
 const route = useRoute()
 const startDate = ref(null)

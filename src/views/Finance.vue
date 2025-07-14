@@ -24,7 +24,7 @@
   </div>
 </template>
 
-<!-- Script -->
+<!-- Scripts -->
 <script setup>
 import { ref } from 'vue'
 

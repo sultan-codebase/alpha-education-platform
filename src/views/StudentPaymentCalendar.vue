@@ -193,6 +193,7 @@
     :key="i"
     class="flex items-center bg-[rgb(194,189,250)] rounded-lg p-4"
   >
+
 <!-- Блок с галочкой -->
   <div class="p-1 mr-4 flex-shrink-0 bg-[#9085FF] rounded border-2 border-white">
     <svg
@@ -225,7 +226,7 @@
 
 <!--Режим «История платежей» -->
   <div v-else-if="mode === 'history'" class="space-y-6">
-<!-- Таблица с историей платежей (осталась на месте сверху) -->
+<!-- Таблица с историей платежей -->
   <table class="w-full border border-purple-200 rounded-lg overflow-hidden text-left">
     <thead class="bg-[#F1EFFF] text-sm font-semibold">
       <tr>
@@ -264,11 +265,12 @@
     </button>
   </div>
  
-<!-- 2) Форма добавления платежа в синем контейнере -->
+<!-- 2) Форма добавления платежа в таблицу -->
   <div
     v-else
     class=" bg-[#F1EFFF] p-6 rounded-lg flex items-center space-x-4"
   >
+
 <!-- Дата платежа -->
   <div class="w-56">
     <Datepicker
@@ -374,6 +376,7 @@
 </template>
 
 
+<!-- Scripts -->
 <script setup lang="ts">
 import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { useStudentStore } from '@/store/studentStore'
@@ -419,7 +422,6 @@ const mode = ref<'calendar' | 'history'>('calendar')
 
 const router = useRouter()
 
-// Ссылки на dropdown-обёртки
 const statusDropdownRef = ref<HTMLElement | null>(null)
 const financingDropdownRef = ref<HTMLElement | null>(null)
 
@@ -483,7 +485,6 @@ function handleClickOutsideDropdowns(event: MouseEvent) {
   }
 }
 
-// Для New Payment panel
 function toggleNewStatusDropdown() {
   showNewStatusDropdown.value = !showNewStatusDropdown.value
 }
@@ -546,7 +547,6 @@ function addPayment() {
   showNewPaymentForm.value = true
 }
 
-// ваш onMounted с загрузкой student.value и paymentSchedule
 onMounted(async () => {
   if (!store.list.length) await store.fetchStudents()
   const s = store.list.find(x => x.id === +props.id)
@@ -616,7 +616,6 @@ onMounted(async () => {
   padding: 10px 16px;
 }
 
-/* Таблица */
 table {
   border-collapse: collapse;
 }
@@ -645,7 +644,6 @@ table {
   font-weight: 500;
 }
 
-/* Кнопка «Добавить платёж» */
 .add-payment-btn {
   background-color: #6252FE;
   color: #FFFFFF;
@@ -658,12 +656,9 @@ table {
   background-color: #5140E5;
 }
 
-/* новый класс для полей внутри панели добавления платежа */
 .add-payment-input {
   background-color: #FFFFFF;
-  /* если нужно, добавьте !important:
-     background-color: #FFFFFF !important;
-  */
+  
 }
 .close-btn {
   position: absolute;

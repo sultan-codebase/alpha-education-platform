@@ -23,7 +23,7 @@
 
     <!-- Фильтры -->
     <div class="filters-wrapper relative flex flex-wrap gap-3 mb-6 items-center">
-      <!-- Тип финансирования + Reset -->
+      <!-- Тип финансирования -->
       <div class="flex items-center gap-2">
         <div ref="fundingDropdownRef" class="relative w-56">
           <button
@@ -166,6 +166,8 @@
   </div>
 </template>
 
+
+<!-- Scripts -->
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import * as XLSX from 'xlsx'
@@ -193,7 +195,7 @@ const students = [
   { name: 'Антонов В.С.', funding: 'Скидка 30%', percent: '70%', total: '500.000', covered: '350.000', pay: '150.000' },
 ]
 
-// Глобальный слушатель для закрытия dropdown
+// Глобальный слушатель(для дропдаунов)
 function handleClickOutside(event) {
   if (
     showFundingType.value &&
@@ -344,7 +346,6 @@ background-color: #F1EFFF;
   flex-wrap: wrap;
 }
 
-/* Необязательно, если не хватает Tailwind */
 .custom-checkbox {
   width: 20px;
   height: 20px;
@@ -378,5 +379,4 @@ background-color: #F1EFFF;
   color: #3b299c;
   border-color: #6252FE;
 }
-
 </style>

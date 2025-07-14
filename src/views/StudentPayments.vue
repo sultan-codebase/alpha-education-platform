@@ -1,9 +1,11 @@
 <template>
   <div class="student-payments">
     <!-- Верхняя панель -->
+
     <div class="top-bar">
       <h2>Оплаты студентов</h2>
       <!-- Поисковик -->
+
       <div class="search-wrapper">
         <img src="@/assets/logos/search.png" class="search-icon" />
         <input
@@ -151,7 +153,7 @@
   </div>
 </template>
 
-<!-- Script -->
+<!-- Scripts -->
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
@@ -208,7 +210,6 @@ const filteredStudents = computed(() =>
   })
 )
 
-// --- ГЛОБАЛЬНЫЙ СЛУШАТЕЛЬ ---
 function handleClickOutside(event) {
   if (
     showFundingDropdown.value &&
