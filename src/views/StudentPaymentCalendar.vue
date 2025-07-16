@@ -1,147 +1,148 @@
 <template>
   <div class="p-6 font-inter">
-<!-- Загрузка -->
-  <div v-if="!student" class="text-center py-10">Загрузка...</div>
-  <div v-else>
+    <button class="close-btn" @click="closeCard">✕</button>
+    <!-- Загрузка -->
+    <div v-if="!student" class="text-center py-10">Загрузка...</div>
+    <div v-else>
 
-<!-- Аватар + имя -->
-  <div class="flex flex-col items-center mb-6">
-    <div class="w-24 h-24 mb-3 rounded-full border-2 border-purple-200"></div>
-    <h2 class="text-2xl font-bold">{{ student.name }}</h2>
-  </div>
+      <!-- Аватар + имя -->
+      <div class="flex flex-col items-center mb-6">
+        <div class="w-24 h-24 mb-3 rounded-full border-2 border-purple-200"></div>
+        <h2 class="text-2xl font-bold">{{ student.name }}</h2>
+      </div>
 
-<!-- Блок 1: Информация о студенте -->
-  <div class="mb-6 w-full rounded-xl border border-[#E0D7FF] overflow-visible">
-    <table class="w-full text-left">
-      <thead class="bg-[rgb(185,179,248)] text-sm font-semibold">
-        <tr>
-          <th class="px-6 py-3 rounded-tl-lg">Данные</th>
-          <th class="px-6 py-3 rounded-tr-lg">Информация о студенте</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-[#E6E3F1]">
-      <tr><td class="px-6 py-2">ИИН</td><td class="px-6 py-2">{{ student.iin }}</td></tr>
-      <tr><td class="px-6 py-2">Email</td><td class="px-6 py-2">{{ student.email }}</td></tr>
-      <tr><td class="px-6 py-2">Телефон</td><td class="px-6 py-2">{{ student.phone }}</td></tr>
+      <!-- Блок 1: Информация о студенте -->
+      <div class="mb-6 w-full rounded-xl border border-[#E0D7FF] overflow-visible">
+        <table class="w-full text-left">
+          <thead class="bg-[#F1EFFF] text-sm font-semibold">
+            <tr>
+              <th class="px-6 py-3 rounded-tl-lg">Данные</th>
+              <th class="px-6 py-3 rounded-tr-lg">Информация о студенте</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#E6E3F1], bg-[#FFFFFF]">
+            <tr><td class="px-6 py-2">ИИН</td><td class="px-6 py-2">{{ student.iin }}</td></tr>
+            <tr><td class="px-6 py-2">Email</td><td class="px-6 py-2">{{ student.email }}</td></tr>
+            <tr><td class="px-6 py-2">Телефон</td><td class="px-6 py-2">{{ student.phone }}</td></tr>
 
-<!-- Статус -->
-<tr>
-  <td class="px-6 py-2">Статус</td>
-  <td class="px-6 py-2">
-    <div class="relative w-48">
-      <button
-        @click="toggleStatusDropdown"
-        class="filter-select w-full flex justify-between items-center"
-        type="button"
-      >
-        {{ selectedStatus || 'Статус' }}
-        <svg
-          :class="[
-            'w-4 h-4 ml-2 transform transition-transform duration-200',
-            showStatusDropdown ? 'rotate-180' : ''
-          ]"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
-      </button>
-      <ul
-        v-if="showStatusDropdown"
-        class="absolute z-50 mt-2 w-full bg-white border border-purple-200 rounded-lg shadow-lg"
-      >
-        <li
-          v-for="opt in statusOptions"
-          :key="opt"
-          @click="selectStatus(opt)"
-          class="cursor-pointer px-4 py-2 hover:bg-gray-100"
-          :class="{ 'text-[rgb(98,82,254)] font-medium': selectedStatus === opt }"
-        >
-          {{ opt }}
-        </li>
-      </ul>
-    </div>
-  </td>
-</tr>
+            <!-- Статус -->
+            <tr>
+              <td class="px-6 py-2">Статус</td>
+              <td class="px-6 py-2">
+                <div ref="statusDropdownRef" class="relative w-48">
+                  <button
+                    @click="toggleStatusDropdown"
+                    class="filter-select w-full flex justify-between items-center"
+                    type="button"
+                  >
+                    {{ selectedStatus || 'Статус' }}
+                    <svg
+                      :class="[
+                        'w-4 h-4 ml-2 transform transition-transform duration-200',
+                        showStatusDropdown ? 'rotate-180' : ''
+                      ]"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+                  <ul
+                    v-if="showStatusDropdown"
+                    class="absolute z-50 mt-2 w-full bg-white border border-purple-200 rounded-lg shadow-lg"
+                  >
+                    <li
+                      v-for="opt in statusOptions"
+                      :key="opt"
+                      @click="selectStatus(opt)"
+                      class="cursor-pointer px-4 py-2 hover:bg-gray-100"
+                      :class="{ 'text-[rgb(98,82,254)] font-medium': selectedStatus === opt }"
+                    >
+                      {{ opt }}
+                    </li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
 
+            <!-- Top Student -->
+            <tr>
+              <td class="px-6 py-2">Top Student</td>
+              <td class="px-6 py-2">
+                <input
+                  type="checkbox"
+                  v-model="topStudent"
+                  class="h-5 w-5 text-green-500 border-gray-300 rounded"
+                />
+              </td>
+            </tr>
 
-<!-- Top Student -->
-  <tr>
-    <td class="px-6 py-2">Top Student</td>
-    <td class="px-6 py-2">
-      <input
-        type="checkbox"
-        v-model="topStudent"
-        class="h-5 w-5 text-green-500 border-gray-300 rounded"
-      />
-    </td>
-  </tr>
+            <!-- Финансирование -->
+            <tr>
+              <td class="px-6 py-2">Финансирование</td>
+              <td class="px-6 py-2">
+                <div ref="financingDropdownRef" class="relative w-48">
+                  <button
+                    @click="toggleFinancingDropdown"
+                    class="filter-select w-full flex justify-between items-center"
+                    type="button"
+                  >
+                    {{ selectedFinancing || 'Финансирование' }}
+                    <svg
+                      :class="[
+                        'w-4 h-4 ml-2 transform transition-transform duration-200',
+                        showFinancingDropdown ? 'rotate-180' : ''
+                      ]"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+                  <ul
+                    v-if="showFinancingDropdown"
+                    class="absolute z-50 mt-2 w-full bg-white border border-purple-200 rounded-lg shadow-lg"
+                  >
+                    <li
+                      v-for="opt in financingOptions"
+                      :key="opt"
+                      @click="selectFinancing(opt)"
+                      class="cursor-pointer px-4 py-2 hover:bg-gray-100"
+                      :class="{ 'text-[rgb(98,82,254)] font-medium': selectedFinancing === opt }"
+                    >
+                      {{ opt }}
+                    </li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-<!-- Финансирование -->
-<tr>
-  <td class="px-6 py-2">Финансирование</td>
-  <td class="px-6 py-2">
-    <div class="relative w-48">
-      <button
-        @click="toggleFinancingDropdown"
-        class="filter-select w-full flex justify-between items-center"
-        type="button"
-      >
-        {{ selectedFinancing || 'Финансирование' }}
-        <svg
-          :class="[
-            'w-4 h-4 ml-2 transform transition-transform duration-200',
-            showFinancingDropdown ? 'rotate-180' : ''
-          ]"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
-      </button>
-      <ul
-        v-if="showFinancingDropdown"
-        class="absolute z-50 mt-2 w-full bg-white border border-purple-200 rounded-lg shadow-lg"
-      >
-        <li
-          v-for="opt in financingOptions"
-          :key="opt"
-          @click="selectFinancing(opt)"
-          class="cursor-pointer px-4 py-2 hover:bg-gray-100"
-          :class="{ 'text-[rgb(98,82,254)] font-medium': selectedFinancing === opt }"
-        >
-          {{ opt }}
-        </li>
-      </ul>
-    </div>
-  </td>
-</tr>
-</tbody>
-</table>
-</div>
 
 <!-- Блок 2: Сводка платежей -->
   <div class="mb-6 w-full rounded-xl border border-[#E0D7FF] overflow-visible">
     <table class="w-full text-left">
-      <thead class="bg-[rgb(185,179,248)] text-sm font-semibold">
+      <thead class="bg-[#F1EFFF] text-sm font-semibold">
         <tr>
           <th class="px-6 py-3 rounded-tl-lg">Оплата за курс</th>
           <th class="px-6 py-3 rounded-tr-lg">{{ student.totalCoursePrice.toLocaleString('ru-RU') }} ₸</th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-[#E6E3F1]">
+      <tbody class="divide-y divide-[#E6E3F1], bg-[#FFFFFF]">
         <tr>
           <td class="px-6 py-2">Сумма со скидкой {{ student.discountPercent }}%</td>
           <td class="px-6 py-2">{{ student.discountedPrice.toLocaleString('ru-RU') }} ₸</td>
@@ -164,7 +165,7 @@
 
 <!-- Переключатель режимов -->
   <div class="mt-14 mb-6">
-    <div class="bg-[rgb(185,179,248)]  p-2 rounded-lg">
+    <div class="bg-[#F1EFFF]  p-2 rounded-lg">
       <div class="flex space-x-3">
         <button
         :class="mode === 'calendar' ? 'btn-primary flex-1' : 'btn-secondary flex-1'"
@@ -192,8 +193,9 @@
     :key="i"
     class="flex items-center bg-[rgb(194,189,250)] rounded-lg p-4"
   >
+
 <!-- Блок с галочкой -->
-  <div class="p-1 mr-4 flex-shrink-0 bg-[#6252FE] rounded border-2 border-white">
+  <div class="p-1 mr-4 flex-shrink-0 bg-[#9085FF] rounded border-2 border-white">
     <svg
       class="w-4 h-4 text-white"
       fill="none"
@@ -224,9 +226,9 @@
 
 <!--Режим «История платежей» -->
   <div v-else-if="mode === 'history'" class="space-y-6">
-<!-- Таблица с историей платежей (осталась на месте сверху) -->
+<!-- Таблица с историей платежей -->
   <table class="w-full border border-purple-200 rounded-lg overflow-hidden text-left">
-    <thead class="bg-[rgb(185,179,248)] text-sm font-semibold">
+    <thead class="bg-[#F1EFFF] text-sm font-semibold">
       <tr>
         <th class="px-4 py-2">Дата платежа</th>
         <th class="px-4 py-2">Комментарий</th>
@@ -263,11 +265,12 @@
     </button>
   </div>
  
-<!-- 2) Форма добавления платежа в синем контейнере -->
+<!-- 2) Форма добавления платежа в таблицу -->
   <div
     v-else
-    class=" bg-[rgb(185,179,248)] p-6 rounded-lg flex items-center space-x-4"
+    class=" bg-[#F1EFFF] p-6 rounded-lg flex items-center space-x-4"
   >
+
 <!-- Дата платежа -->
   <div class="w-56">
     <Datepicker
@@ -285,7 +288,8 @@
       v-model="newPayment.comment"
       type="text"
       placeholder="Комментарий"
-      class="filter-select w-full focus:outline-none focus:ring-2 focus:ring-[#9a8ffd]"
+      class="filter-select bg-white w-full focus:outline-none focus:ring-2,"
+      style="background-color: #ffffff;"
     />
   </div>
 
@@ -295,6 +299,7 @@
     @click="toggleNewStatusDropdown"
     class="filter-select w-full flex justify-between items-center"
     type="button"
+    style="background-color: #ffffff;"
   >
     {{ newPayment.status || 'Статус' }}
     <svg
@@ -342,7 +347,8 @@
       v-model.number="newPayment.amount"
       type="number"
       placeholder="Сумма"
-      class="filter-select w-full focus:outline-none focus:ring-2 focus:ring-[#9a8ffd]"
+      class="filter-select w-full focus:outline-none"
+      style="background-color: #ffffff;"
     />
   </div>
 
@@ -357,7 +363,7 @@
     </button>
     <button
       @click="showAddPanel = false"
-      class="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400"
+      class="bg-white text-gray-700 py-2 px-4 rounded hover:bg-[#D77A7A]"
       type="button"
     >
       Отмена
@@ -370,19 +376,20 @@
 </template>
 
 
-<!-- Script -->
+<!-- Scripts -->
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { useStudentStore } from '@/store/studentStore'
 import Datepicker from "@vuepic/vue-datepicker"
 import "@vuepic/vue-datepicker/dist/main.css"
+import { useRouter } from 'vue-router'
 
 
 interface ScheduleItem {
   date: string
   amount: number
   paid: boolean
-  comment?:string
+  comment?: string
 }
 
 interface Student {
@@ -393,23 +400,19 @@ interface Student {
   status: string
   email: string
   phone: string
-
   totalCoursePrice: number
   discountPercent: number
   discountedPrice: number
   paymentPeriod: string
   amountPaid: number
   amountDue: number
-
   sampleDate: string
   sampleStatus: string
   sampleAmount: number
-
   paymentSchedule: ScheduleItem[]
 }
 
 interface RouteProps { id: string }
-
 const props = defineProps<RouteProps>()
 const showNewPaymentForm = ref(false)
 const showAddPanel = ref(false)
@@ -417,19 +420,23 @@ const store = useStudentStore()
 const student = ref<Student | null>(null)
 const mode = ref<'calendar' | 'history'>('calendar')
 
-// Статус
+const router = useRouter()
+
+const statusDropdownRef = ref<HTMLElement | null>(null)
+const financingDropdownRef = ref<HTMLElement | null>(null)
+
 const statusOptions = ['Студент', 'Выпускник']
 const selectedStatus = ref<string>('')
 const showStatusDropdown = ref(false)
-// Top Student
+
+const financingOptions = ['TechOrda', 'Скидка 30%', 'Скидка 70%', 'Внутренний грант', 'Польная оплата']
+const selectedFinancing = ref<string>('')
+const showFinancingDropdown = ref(false)
+
 const topStudent = ref(false)
 const historyStatusOptions = ['Оплачен', 'Не оплачен']
 const showNewStatusDropdown = ref(false)
-// Финансирование
-const financingOptions = ['TechOrda', 'Скидка 30%', 'Скидка 70%', 'Внутренний грант']
-const selectedFinancing = ref<string>('')
-const showFinancingDropdown = ref(false)
-// Панель «Добавить платёж»
+
 const newPayment = reactive<{
   date?: Date
   comment: string
@@ -444,28 +451,46 @@ const newPayment = reactive<{
 
 function toggleStatusDropdown() {
   showStatusDropdown.value = !showStatusDropdown.value
-  showFinancingDropdown.value = false
+  if (showStatusDropdown.value) showFinancingDropdown.value = false
 }
 function selectStatus(opt: string) {
   selectedStatus.value = opt
   showStatusDropdown.value = false
 }
-function addPayment() {
-//  Логика открытия формы или API-запроса
-  showNewPaymentForm.value = true
-}
-function onAddPayment() {
-  showAddPanel.value = !showAddPanel.value
-}
-
 function toggleFinancingDropdown() {
   showFinancingDropdown.value = !showFinancingDropdown.value
-  showStatusDropdown.value = false
+  if (showFinancingDropdown.value) showStatusDropdown.value = false
 }
-
 function selectFinancing(opt: string) {
   selectedFinancing.value = opt
   showFinancingDropdown.value = false
+}
+
+function handleClickOutsideDropdowns(event: MouseEvent) {
+  // Статус
+  if (
+    showStatusDropdown.value &&
+    statusDropdownRef.value &&
+    !statusDropdownRef.value.contains(event.target as Node)
+  ) {
+    showStatusDropdown.value = false
+  }
+  // Финансирование
+  if (
+    showFinancingDropdown.value &&
+    financingDropdownRef.value &&
+    !financingDropdownRef.value.contains(event.target as Node)
+  ) {
+    showFinancingDropdown.value = false
+  }
+}
+
+function toggleNewStatusDropdown() {
+  showNewStatusDropdown.value = !showNewStatusDropdown.value
+}
+function selectNewStatus(opt: string) {
+  newPayment.status = opt
+  showNewStatusDropdown.value = false
 }
 
 // Формат даты
@@ -473,15 +498,6 @@ function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString('ru-RU', {
     day: 'numeric', month: 'long', year: 'numeric'
   })
-}
-
-function toggleNewStatusDropdown() {
-  showNewStatusDropdown.value = !showNewStatusDropdown.value
-}
-
-function selectNewStatus(opt: string) {
-  newPayment.status = opt
-  showNewStatusDropdown.value = false
 }
 
 function formatDateIso(iso: string) {
@@ -493,120 +509,113 @@ function formatDateIso(iso: string) {
   })
 }
 
+function closeCard() {
+  if (window.history.length > 1) router.back()
+  else router.push('/finance/payments')
+}
+
 async function saveNewPayment() {
   if (!student.value || !newPayment.date || !newPayment.amount || !newPayment.status) {
     return
   }
-  // Добавляем в расписание
-  student.value.paymentSchedule.push({
+  student.value.paymentSchedule.unshift({          
     date: newPayment.date.toISOString().slice(0,10),
     amount: newPayment.amount,
     paid: newPayment.status === 'Оплачен',
     comment: newPayment.comment
   })
-  // Сбрасываем форму
   newPayment.date = undefined
   newPayment.comment = ''
   newPayment.status = ''
   newPayment.amount = null
-  mode.value = 'history' 
+  mode.value = 'history'
   showNewPaymentForm.value = false
 }
 
-// ваш onMounted с загрузкой student.value и paymentSchedule
-onMounted(async () => {
-  // Если список студентов ещё не загружен — загрузим его
-  if (!store.list.length) {
-    await store.fetchStudents()
-  }
+onMounted(() => {
+  document.addEventListener('mousedown', handleClickOutsideDropdowns)
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('mousedown', handleClickOutsideDropdowns)
+})
 
-  // Находим нужного студента по id из props
+function onAddPayment() {
+  showAddPanel.value = !showAddPanel.value
+}
+
+function addPayment() {
+  showNewPaymentForm.value = true
+}
+
+onMounted(async () => {
+  if (!store.list.length) await store.fetchStudents()
   const s = store.list.find(x => x.id === +props.id)
   if (!s) return
-
-  // Заполняем student.value всеми полями, в том числе обязательными status и financing
   student.value = {
     ...s,
-    status: s.status || 'Активен',        // обязательное поле status        // если у вас есть financing
     email: 'example@mail.com',
     phone: '+7(777)-111-11-11',
     totalCoursePrice: 850000,
     discountPercent: 30,
     discountedPrice: 595000,
-    paymentPeriod: '6 месяца',
+    paymentPeriod: '8 месяца',
     amountPaid: 595000,
     amountDue: 0,
     sampleDate: '24.06.2025',
     sampleStatus: 'Погашен',
     sampleAmount: 595000,
-    paymentSchedule: []
+    paymentSchedule: [],
+    status: s.status || 'Активен'
   }
 
-  if (!student.value) {
-  return
-}
+  if (!student.value) return
 
-// Деструктурируем необходимые поля — TS знает, что student.value != null
-const {
-  paymentPeriod: period,
-  sampleDate,
-  discountedPrice,
-  amountPaid,
-} = student.value
-
-if (period === 'Оплачена полная сумма') {
-  student.value.paymentSchedule = [{
-    date:   sampleDate,
-    amount: discountedPrice,
-    paid:   true,
-  }]
-} else {
-  const months   = parseInt(period, 10) || 1
-  const perMonth = Math.round(discountedPrice / months)
-
-  student.value.paymentSchedule = Array.from(
-    { length: months },
-    (_, i) => ({
-      date:   `Месяц ${i + 1}`,
+  const period = student.value.paymentPeriod
+  if (period === 'Оплачена полная сумма') {
+    student.value.paymentSchedule = [{
+      date: student.value.sampleDate,
+      amount: student.value.discountedPrice,
+      paid: true
+    }]
+  } else {
+    const months = parseInt(period) || 1
+    const perMonth = Math.round(student.value.discountedPrice / months)
+    student.value.paymentSchedule = Array.from({ length: months }, (_, i) => ({
+      date: `Месяц ${i + 1}`,
       amount: perMonth,
-      paid:   i < Math.floor(amountPaid),
-    })
-  )
-}
+      paid: i < Math.floor(student.value!.amountPaid)
+    }))
+  }
 
-  // Cтатус студента(dropdown)
   selectedStatus.value = s.status === 'graduated' ? 'Выпускник' : 'Студент'
   topStudent.value = !!(s as any).topStudent
 })
 </script>
 
-
 <!-- Styles -->
 <style scoped>
 .filter-select {
-  background: #f4f0ff;
+  background: #F1EFFF;
   color: #6252FE;
-  border: 1px solid #cfc0ff;
   border-radius: 8px;
   padding: 8px 12px;
   font-size: 14px;
 }
 .btn-primary {
   background: #6252fe;
-  color: white;
+  color: #FFFFFF;
   font-weight: 600;
   border-radius: 8px;
   padding: 10px 16px;
 }
 .btn-secondary {
-  background: #f4f0ff;
+  background: #FFFFFF;
   color: #6252FE;
   font-weight: 600;
   border-radius: 8px;
   padding: 10px 16px;
 }
 
-/* Таблица */
 table {
   border-collapse: collapse;
 }
@@ -635,7 +644,6 @@ table {
   font-weight: 500;
 }
 
-/* Кнопка «Добавить платёж» */
 .add-payment-btn {
   background-color: #6252FE;
   color: #FFFFFF;
@@ -646,6 +654,23 @@ table {
 }
 .add-payment-btn:hover {
   background-color: #5140E5;
+}
+
+.add-payment-input {
+  background-color: #FFFFFF;
+  
+}
+.close-btn {
+  position: absolute;
+  top: 75px;
+  right: 26px;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  color: #836eff; cursor: pointer;
+  z-index: 99;
 }
 </style>
 

@@ -2,169 +2,168 @@
   <div class="p-6 font-inter">
     <h2 class="text-2xl font-bold mb-6">Задолженности</h2>
 
-<!-- Tabs -->
-  <div class="flex space-x-4 bg-[#F1EFFF] p-3 rounded-lg mb-4">
-    <router-link to="/finance/reports/total-revenue" class="tab-button">Общая выручка</router-link>
-    <router-link to="/finance/reports/debts" class="tab-button-active">Задолженности</router-link>
-    <router-link to="/finance/reports/student-funding" class="tab-button">Финансирование студентов</router-link>
-  </div>
-  
-<!-- Filters -->
-  <div class="filters-wrapper relative flex flex-wrap gap-3 mb-6">
-<!-- Начало периода -->
-  <div class="relative">
-    <button @click="toggleStartPicker" class="filter-select w-48">
-      {{ startDate ? formatDate(startDate) : 'Начало периода' }}
-    </button>
-    <teleport to="body">
-  <div
-    v-if="showStartPicker"
-    class="datepicker-popup"
-    :style="popupPosition.start"
-    ref="startPickerRef"
-  >
-    <Datepicker v-model="startDate" @update:modelValue="closeStartPicker" />
-  </div>
-    </teleport>
-  </div>
-
-<!-- Конец периода -->
-  <div class="relative">
-    <button @click="toggleEndPicker" class="filter-select w-48">
-      {{ endDate ? formatDate(endDate) : 'Конец периода' }}
-    </button>
-    <teleport to="body">
-    <div
-      v-if="showEndPicker"
-      class="datepicker-popup"
-      :style="popupPosition.end"
-      ref="endPickerRef"
-    >
-      <Datepicker v-model="endDate" @update:modelValue="closeEndPicker" />
+    <!-- Вкладки -->
+    <div class="flex space-x-4 bg-[#F1EFFF] p-3 rounded-lg mb-4">
+      <router-link to="/finance/reports/total-revenue" class="tab-button">Общая выручка</router-link>
+      <router-link to="/finance/reports/debts" class="tab-button-active">Задолженности</router-link>
+      <router-link to="/finance/reports/student-funding" class="tab-button">Финансирование студентов</router-link>
     </div>
-      </teleport>
+    
+    <!-- Филтер -->
+    <div class="filters-wrapper relative flex flex-wrap gap-3 mb-6">
+      <!-- Начало периода -->
+      <div class="relative">
+        <button @click="toggleStartPicker" class="filter-select w-48">
+          {{ startDate ? formatDate(startDate) : 'Начало периода' }}
+        </button>
+        <teleport to="body">
+          <div
+            v-if="showStartPicker"
+            class="datepicker-popup"
+            :style="popupPosition.start"
+            ref="startPickerRef"
+          >
+            <Datepicker v-model="startDate" @update:modelValue="closeStartPicker" />
+          </div>
+        </teleport>
+      </div>
+
+      <!-- Конец периода -->
+      <div class="relative">
+        <button @click="toggleEndPicker" class="filter-select w-48">
+          {{ endDate ? formatDate(endDate) : 'Конец периода' }}
+        </button>
+        <teleport to="body">
+          <div
+            v-if="showEndPicker"
+            class="datepicker-popup"
+            :style="popupPosition.end"
+            ref="endPickerRef"
+          >
+            <Datepicker v-model="endDate" @update:modelValue="closeEndPicker" />
+          </div>
+        </teleport>
+      </div>
+
+      <!-- Статус (дропдаун) -->
+      <div ref="statusDropdownRef" class="relative w-40">
+        <button
+          @click="toggleStatusDropdown"
+          class="filter-select w-full flex justify-between items-center"
+          type="button"
+        >
+          {{ selectedStatus || 'Статус' }}
+          <svg
+            :class="[
+              'w-4 h-4 ml-2 transform transition-transform duration-200',
+              showStatusDropdown ? 'rotate-180' : ''
+            ]"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </button>
+        <ul
+          v-if="showStatusDropdown"
+          class="absolute z-50 mt-2 w-full bg-white border border-purple-200
+                rounded-lg shadow-lg overflow-hidden"
+        >
+          <li
+            @click="selectStatus('Оплачен')"
+            class="cursor-pointer px-4 py-2 hover:bg-gray-100"
+            :class="{ 'text-[rgb(98,82,254)] font-medium': selectedStatus === 'Оплачен' }"
+          >
+            Оплачен
+          </li>
+          <li
+            @click="selectStatus('Не оплачен')"
+            class="cursor-pointer px-4 py-2 hover:bg-gray-100"
+            :class="{ 'text-[rgb(98,82,254)] font-medium': selectedStatus === 'Не оплачен' }"
+          >
+            Не оплачен
+          </li>
+        </ul>
+      </div>
+    </div>    
+
+    <!-- Таблица -->
+    <table class="w-full bg-white border border-purple-200 rounded-lg overflow-hidden text-left">
+      <thead class="bg-[#ECE9FF] text-sm font-semibold">
+        <tr>
+          <th class="px-4 py-2 w-12">№</th>
+          <th class="px-4 py-2">Студент</th>
+          <th class="px-4 py-2">К оплате (тг)</th>
+          <th class="px-4 py-2">Дата оплаты</th>
+          <th class="px-4 py-2">Статус</th>
+          <th class="px-4 py-2">Комментарий</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item, i) in filteredRows" :key="i" class="border-t">
+          <!-- Нумерация -->
+          <td class="px-4 py-2">
+            <div class=" w-6 h-6 rounded-md bg-[#F1ECFF] text-[rgb(98,82,254)] text-xs font-semibold flex items-center justify-center">
+              {{ i + 1 }}
+            </div>
+          </td>
+          <td class="px-4 py-2">{{ item.student }}</td>
+          <td class="px-4 py-2">{{ item.amount }}</td>
+          <td class="px-4 py-2">{{ item.paymentDate }}</td>
+          <td class="px-4 py-2">
+            <span :class="item.status === 'Оплачен' ? 'status-paid' : 'status-unpaid'">
+              {{ item.status }}
+            </span>
+          </td>
+          <td class="px-4 py-2">{{ item.comment }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Блок задолженностей -->
+    <div class="mt-6 w-full rounded-xl overflow-hidden border border-[#E0D7FF]">
+      <!-- Период -->
+      <div class="bg-[#ECE9FF] px-6 py-4 text-sm font-semibold text-black">
+        Период {{ formattedPeriod }}
+      </div>
+      <!-- Общая сумма платежей -->
+      <div class="bg-white px-6 py-4 text-sm flex justify-between items-center border-b border-gray-200/60">
+        <div>Общая сумма платежей</div>
+        <div>{{ totalPayments.toLocaleString('ru-RU') }} ₸</div>
+      </div>
+      <!-- Оплаченная сумма -->
+      <div class="bg-white px-6 py-4 text-sm flex justify-between items-center border-b border-gray-200/60">
+        <div>Оплаченная сумма</div>
+        <div>{{ paidAmount.toLocaleString('ru-RU') }} ₸</div>
+      </div>
+      <!-- Неоплаченная сумма -->
+      <div class="bg-white px-6 py-4 text-sm flex justify-between items-center border-b border-gray-200/60">
+        <div>Неоплаченная сумма</div>
+        <div>{{ unpaidAmount.toLocaleString('ru-RU') }} ₸</div>
+      </div>
+      <!-- Общая задолженность -->
+      <div class="bg-[#ECE9FF] px-6 py-4 text-sm font-semibold flex justify-between items-center">
+        <div>Общая задолженность</div>
+        <div>{{ unpaidAmount.toLocaleString('ru-RU') }} ₸</div>
+      </div>
     </div>
 
- <!-- Статус (дропдаун) -->
-<div class="relative w-40">
-  <button
-    @click="toggleStatusDropdown"
-    class="filter-select w-full flex justify-between items-center"
-    type="button"
-  >
-    {{ selectedStatus || 'Статус' }}
-    <svg
-      :class="[
-        'w-4 h-4 ml-2 transform transition-transform duration-200',
-        showStatusDropdown ? 'rotate-180' : ''
-      ]"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M19 9l-7 7-7-7"
-      />
-    </svg>
-  </button>
-  <ul
-    v-if="showStatusDropdown"
-    class="absolute z-50 mt-2 w-full bg-white border border-purple-200
-           rounded-lg shadow-lg overflow-hidden"
-  >
-    <li
-      @click="selectStatus('Оплачен')"
-      class="cursor-pointer px-4 py-2 hover:bg-gray-100"
-      :class="{ 'text-[rgb(98,82,254)] font-medium': selectedStatus === 'Оплачен' }"
-    >
-      Оплачен
-    </li>
-    <li
-      @click="selectStatus('Не оплачен')"
-      class="cursor-pointer px-4 py-2 hover:bg-gray-100"
-      :class="{ 'text-[rgb(98,82,254)] font-medium': selectedStatus === 'Не оплачен' }"
-    >
-      Не оплачен
-    </li>
-  </ul>
-</div>
-</div>    
-
-<!-- Table -->
-<table class="w-full bg-white border border-purple-200 rounded-lg overflow-hidden text-left">
-  <thead class="bg-[#ECE9FF] text-sm font-semibold">
-    <tr>
-      <th class="px-4 py-2 w-12">№</th>
-      <th class="px-4 py-2">Студент</th>
-      <th class="px-4 py-2">К оплате (тг)</th>
-      <th class="px-4 py-2">Дата оплаты</th>
-      <th class="px-4 py-2">Статус</th>
-      <th class="px-4 py-2">Комментарий</th>
-    </tr>
-  </thead>
-  <tbody>
-  <tr v-for="(item, i) in filteredRows" :key="i" class="border-t">
-<!-- Нумерация -->
-  <td class="px-4 py-2">
-    <div class=" w-6 h-6 rounded-md bg-[#F1ECFF] text-[rgb(98,82,254)] text-xs font-semibold flex items-center justify-center">
-      {{ i + 1 }}
+    <!-- Кнопка слхранить-Excell -->
+    <div class="mt-4 flex justify-end">
+      <button @click="downloadExcel" class="download-btn">
+        Сохранить в Excel
+      </button>
     </div>
-  </td>
-    <td class="px-4 py-2">{{ item.student }}</td>
-    <td class="px-4 py-2">{{ item.amount }}</td>
-    <td class="px-4 py-2">{{ item.paymentDate }}</td>
-    <td class="px-4 py-2">
-  <span :class="item.status === 'Оплачен' ? 'status-paid' : 'status-unpaid'">
-    {{ item.status }}
-  </span>
-  </td>
-  <td class="px-4 py-2">{{ item.comment }}</td>
-  </tr>
-</tbody>
-</table>
-
-<!-- Text Box for Debts -->
-<div class="mt-6 w-full rounded-xl overflow-hidden border border-[#E0D7FF]">
-<!-- Период -->
-<div class="bg-[#ECE9FF] px-6 py-4 text-sm font-semibold text-black">
-  Период {{ formattedPeriod }}
-</div>
-<!-- Общая сумма платежей -->
-<div class="bg-white px-6 py-4 text-sm flex justify-between items-center border-b border-gray-200/60">
-  <div>Общая сумма платежей</div>
-  <div>{{ totalPayments.toLocaleString('ru-RU') }} ₸</div>
-</div>
-<!-- Оплаченная сумма -->
-<div class="bg-white px-6 py-4 text-sm flex justify-between items-center border-b border-gray-200/60">
-  <div>Оплаченная сумма</div>
-  <div>{{ paidAmount.toLocaleString('ru-RU') }} ₸</div>
-</div>
-<!-- Неоплаченная сумма -->
-<div class="bg-white px-6 py-4 text-sm flex justify-between items-center border-b border-gray-200/60">
-  <div>Неоплаченная сумма</div>
-  <div>{{ unpaidAmount.toLocaleString('ru-RU') }} ₸</div>
-</div>
-<!-- Общая задолженность -->
-<div class="bg-[#ECE9FF] px-6 py-4 text-sm font-semibold flex justify-between items-center">
-  <div>Общая задолженность</div>
-  <div>{{ unpaidAmount.toLocaleString('ru-RU') }} ₸</div>
-</div>
-</div>
-
-<!-- Download Button -->
-<div class="mt-4 flex justify-end">
-  <button @click="downloadExcel" class="download-btn">
-    Сохранить в Excel
-  </button>
   </div>
-</div>
 </template>
 
-
-<!-- Script -->
+<!-- Scripts -->
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import Datepicker from 'vue3-datepicker'
@@ -178,13 +177,13 @@ const showEndPicker = ref(false)
 const startPickerRef = ref(null)
 const endPickerRef = ref(null)
 const popupPosition = ref({ start: '', end: '' })
-const showStatusDropdown = ref(false)
 
+const showStatusDropdown = ref(false)
+const statusDropdownRef = ref(null)
 
 function toggleStatusDropdown() {
   showStatusDropdown.value = !showStatusDropdown.value
 }
-
 function selectStatus(status) {
   selectedStatus.value = status
   showStatusDropdown.value = false
@@ -201,7 +200,6 @@ function toggleStartPicker(event) {
     popupPosition.value.start = `position: absolute; top: ${rect.bottom + window.scrollY + 5}px; left: ${rect.left}px; z-index: 9999;`
   }
 }
-
 function toggleEndPicker(event) {
   showEndPicker.value = !showEndPicker.value
   if (showEndPicker.value) {
@@ -209,7 +207,6 @@ function toggleEndPicker(event) {
     popupPosition.value.end = `position: absolute; top: ${rect.bottom + window.scrollY + 5}px; left: ${rect.left}px; z-index: 9999;`
   }
 }
-
 function closeStartPicker() {
   showStartPicker.value = false
 }
@@ -217,7 +214,16 @@ function closeEndPicker() {
   showEndPicker.value = false
 }
 
-function handleClickOutside(event) {
+// --- Глобальный слушатель(для дропдаунов) ---
+function handleClickOutsideDropdowns(event) {
+  // Статус
+  if (
+    showStatusDropdown.value &&
+    statusDropdownRef.value &&
+    !statusDropdownRef.value.contains(event.target)
+  ) {
+    showStatusDropdown.value = false
+  }
   if (
     (startPickerRef.value && !startPickerRef.value.contains(event.target)) &&
     (endPickerRef.value && !endPickerRef.value.contains(event.target))
@@ -227,8 +233,8 @@ function handleClickOutside(event) {
   }
 }
 
-onMounted(() => document.addEventListener('click', handleClickOutside))
-onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
+onMounted(() => document.addEventListener('click', handleClickOutsideDropdowns))
+onBeforeUnmount(() => document.removeEventListener('click', handleClickOutsideDropdowns))
 
 const formattedPeriod = computed(() => {
   if (startDate.value && endDate.value) {
@@ -278,20 +284,18 @@ const totalPayments = computed(() => {
   if (!startDate.value || !endDate.value) return 0;
   return filteredRows.value.reduce((sum, row) => sum + parseInt(row.amount.replace(/\D/g, '')) || 0, 0);
 });
-
 const paidAmount = computed(() => {
   if (!startDate.value || !endDate.value) return 0;
   return filteredRows.value
     .filter(row => row.status === 'Оплачен')
     .reduce((sum, row) => sum + parseInt(row.amount.replace(/\D/g, '')) || 0, 0);
 });
-
 const unpaidAmount = computed(() => totalPayments.value - paidAmount.value);
-
 </script>
 
 
-<!--Styles-->
+
+<!-- Styles -->
 <style scoped>
 .tab-button,
 .tab-button-active {
