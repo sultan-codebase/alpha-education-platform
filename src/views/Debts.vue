@@ -9,41 +9,29 @@
       <router-link to="/finance/reports/student-funding" class="tab-button">Финансирование студентов</router-link>
     </div>
     
-    <!-- Филтер -->
+<!-- Филтер -->
     <div class="filters-wrapper relative flex flex-wrap gap-3 mb-6">
-      <!-- Начало периода -->
-      <div class="relative">
-        <button @click="toggleStartPicker" class="filter-select w-48">
-          {{ startDate ? formatDate(startDate) : 'Начало периода' }}
-        </button>
-        <teleport to="body">
-          <div
-            v-if="showStartPicker"
-            class="datepicker-popup"
-            :style="popupPosition.start"
-            ref="startPickerRef"
-          >
-            <Datepicker v-model="startDate" @update:modelValue="closeStartPicker" />
-          </div>
-        </teleport>
-      </div>
+<!-- Начало периода -->
+    <div class="w-48">
+      <Datepicker
+      v-model="startDate"
+      placeholder="Начало периода"
+      format="dd.MM.yyyy"
+      :input-class="'filter-select w-full'"
+      :enable-time-picker="false"
+      />
+    </div>
 
-      <!-- Конец периода -->
-      <div class="relative">
-        <button @click="toggleEndPicker" class="filter-select w-48">
-          {{ endDate ? formatDate(endDate) : 'Конец периода' }}
-        </button>
-        <teleport to="body">
-          <div
-            v-if="showEndPicker"
-            class="datepicker-popup"
-            :style="popupPosition.end"
-            ref="endPickerRef"
-          >
-            <Datepicker v-model="endDate" @update:modelValue="closeEndPicker" />
-          </div>
-        </teleport>
-      </div>
+<!-- Конец периода -->
+    <div class="w-48">
+      <Datepicker
+      v-model="endDate"
+      placeholder="Конец периода"
+      format="dd.MM.yyyy"
+      :input-class="'filter-select w-full'"
+      :enable-time-picker="false"
+      />
+    </div>
 
       <!-- Статус (дропдаун) -->
       <div ref="statusDropdownRef" class="relative w-40">
@@ -166,17 +154,13 @@
 <!-- Scripts -->
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import Datepicker from 'vue3-datepicker'
+import Datepicker from "@vuepic/vue-datepicker"
+import "@vuepic/vue-datepicker/dist/main.css"
 import * as XLSX from 'xlsx'
 
 const startDate = ref(null)
 const endDate = ref(null)
 const selectedStatus = ref('')
-const showStartPicker = ref(false)
-const showEndPicker = ref(false)
-const startPickerRef = ref(null)
-const endPickerRef = ref(null)
-const popupPosition = ref({ start: '', end: '' })
 
 const showStatusDropdown = ref(false)
 const statusDropdownRef = ref(null)
@@ -191,27 +175,6 @@ function selectStatus(status) {
 
 function formatDate(date) {
   return new Date(date).toLocaleDateString('ru-RU')
-}
-
-function toggleStartPicker(event) {
-  showStartPicker.value = !showStartPicker.value
-  if (showStartPicker.value) {
-    const rect = event.target.getBoundingClientRect()
-    popupPosition.value.start = `position: absolute; top: ${rect.bottom + window.scrollY + 5}px; left: ${rect.left}px; z-index: 9999;`
-  }
-}
-function toggleEndPicker(event) {
-  showEndPicker.value = !showEndPicker.value
-  if (showEndPicker.value) {
-    const rect = event.target.getBoundingClientRect()
-    popupPosition.value.end = `position: absolute; top: ${rect.bottom + window.scrollY + 5}px; left: ${rect.left}px; z-index: 9999;`
-  }
-}
-function closeStartPicker() {
-  showStartPicker.value = false
-}
-function closeEndPicker() {
-  showEndPicker.value = false
 }
 
 // --- Глобальный слушатель(для дропдаунов) ---
@@ -233,8 +196,13 @@ function handleClickOutsideDropdowns(event) {
   }
 }
 
-onMounted(() => document.addEventListener('click', handleClickOutsideDropdowns))
-onBeforeUnmount(() => document.removeEventListener('click', handleClickOutsideDropdowns))
+onMounted(() => {
+  document.addEventListener('click', handleClickOutsideDropdowns)
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutsideDropdowns)
+})
+
 
 const formattedPeriod = computed(() => {
   if (startDate.value && endDate.value) {
