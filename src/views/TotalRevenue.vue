@@ -16,37 +16,25 @@
     <!-- Фильтры -->
     <div class="filters-wrapper relative flex flex-wrap gap-3 mb-6">
       <!-- Начало периода -->
-      <div class="relative">
-        <button @click="toggleStartPicker" class="filter-select w-48 start-picker-btn">
-          {{ startDate ? formatDate(startDate) : 'Начало периода' }}
-        </button>
-        <teleport to="body">
-          <div
-            v-if="showStartPicker"
-            class="datepicker-popup"
-            :style="popupPosition.start"
-            ref="startPickerRef"
-          >
-            <Datepicker v-model="startDate" @update:modelValue="closeStartPicker" />
-          </div>
-        </teleport>
+      <div class="calendar-input w-48">
+        <Datepicker
+        v-model="startDate"
+        placeholder="Начало периода"
+        format="dd.MM.yyyy"
+        :input-class="'filter-select w-full'"
+        :enable-time-picker="false"
+        />
       </div>
 
       <!-- Конец периода -->
-      <div class="relative">
-        <button @click="toggleEndPicker" class="filter-select w-48 end-picker-btn">
-          {{ endDate ? formatDate(endDate) : 'Конец периода' }}
-        </button>
-        <teleport to="body">
-          <div
-            v-if="showEndPicker"
-            class="datepicker-popup"
-            :style="popupPosition.end"
-            ref="endPickerRef"
-          >
-            <Datepicker v-model="endDate" @update:modelValue="closeEndPicker" />
-          </div>
-        </teleport>
+      <div class=" calendar-input w-48">
+        <Datepicker
+        v-model="endDate"
+        placeholder="Конец периода"
+        format="dd.MM.yyyy"
+        :input-class="'filter-select w-full'"
+        :enable-time-picker="false"
+        />
       </div>
 
       <!-- "Курс" -->
@@ -193,7 +181,8 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
-import Datepicker from 'vue3-datepicker'
+import Datepicker from "@vuepic/vue-datepicker"
+import "@vuepic/vue-datepicker/dist/main.css"
 import * as XLSX from 'xlsx'
 
 const showCourseDropdown = ref(false)
@@ -204,6 +193,10 @@ const courseDropdownRef = ref(null)
 const showPaymentDropdown = ref(false)
 const selectedPayment = ref('')
 const paymentDropdownRef = ref(null)
+
+const startDate = ref(null)
+const endDate = ref(null)
+
 
 const paymentOptions = [
   'Tech Orda',
@@ -271,64 +264,20 @@ function handleClickOutsideDropdowns(event) {
 }
 
 const route = useRoute()
-const startDate = ref(null)
-const endDate = ref(null)
-const showStartPicker = ref(false)
-const showEndPicker = ref(false)
-const startPickerRef = ref(null)
-const endPickerRef = ref(null)
-const popupPosition = ref({ start: '', end: '' })
+
+
 
 function formatDate(date) {
   return new Date(date).toLocaleDateString('ru-RU')
 }
 
-function toggleStartPicker(event) {
-  showStartPicker.value = !showStartPicker.value
-  if (showStartPicker.value) {
-    const rect = event.target.getBoundingClientRect()
-    popupPosition.value.start = `position: absolute; top: ${rect.bottom + window.scrollY + 5}px; left: ${rect.left}px; z-index: 9999;`
-  }
-}
-
-function toggleEndPicker(event) {
-  showEndPicker.value = !showEndPicker.value
-  if (showEndPicker.value) {
-    const rect = event.target.getBoundingClientRect()
-    popupPosition.value.end = `position: absolute; top: ${rect.bottom + window.scrollY + 5}px; left: ${rect.left}px; z-index: 9999;`
-  }
-}
-
-function closeStartPicker() {
-  showStartPicker.value = false
-}
-function closeEndPicker() {
-  showEndPicker.value = false
-}
-
-function handleClickOutsideDatePickers(event) {
-  const isClickInsideStart =
-    startPickerRef.value?.contains(event.target) ||
-    event.target.closest('.start-picker-btn')
-
-  const isClickInsideEnd =
-    endPickerRef.value?.contains(event.target) ||
-    event.target.closest('.end-picker-btn')
-
-  if (!isClickInsideStart && !isClickInsideEnd) {
-    showStartPicker.value = false
-    showEndPicker.value = false
-  }
-}
-
 onMounted(() => {
   document.addEventListener('click', handleClickOutsideDropdowns)
-  document.addEventListener('click', handleClickOutsideDatePickers)
 })
 onBeforeUnmount(() => {
   document.removeEventListener('click', handleClickOutsideDropdowns)
-  document.removeEventListener('click', handleClickOutsideDatePickers)
 })
+
 
 const formattedPeriod = computed(() => {
   if (startDate.value && endDate.value) {
@@ -474,9 +423,8 @@ const rows = [
   color: #6252FE;
   font-weight: 600;
 }
-
-.filters-wrapper {
-background-color: #F1EFFF;
+ .filters-wrapper {
+ background-color: #F1EFFF;
   border-radius: 12px;
   padding: 9px;
   margin-bottom: 16px;
